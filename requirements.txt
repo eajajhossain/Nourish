@@ -1,0 +1,23 @@
+# Nourish — zero-cost Indian recipe transformer
+# Core (Phase 0-1)
+pandas>=2.0
+# IFCT PDF parsing (Phase 0)
+pdfplumber>=0.10
+# Ingredient matching (Phase 2)
+rapidfuzz>=3.0
+# Optional semantic matching (rag.py) lives in requirements-optional.txt —
+# it pulls torch (~2GB) and is not needed for the app to run.
+# UI (Phase 5)
+streamlit>=1.30
+# Config
+pyyaml>=6.0
+# Agent layer (Phase 6): LangGraph brain + hybrid RAG + web fallback
+langchain>=0.3
+langchain-groq>=0.2
+langgraph>=0.2
+langgraph-checkpoint-sqlite>=2.0
+tavily-python>=0.5
+chromadb>=0.5
+python-dotenv>=1.0
+# Dev / tests
+pytest>=7.0

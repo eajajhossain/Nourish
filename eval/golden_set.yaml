@@ -1,0 +1,69 @@
+# Golden set for RAG evaluation — run with:  python -m nourish.agent.evaluate
+#
+# Three categories, matching the three levels of the retrieval cascade:
+#   dish_lookup   vector-less RAG: query -> the right dish row must rank first
+#   semantic      vector RAG: descriptive query -> right dish type in top-4
+#   out_of_corpus dishes NOT in our data: the web fallback must trigger
+#
+# `expect` = case-insensitive substrings; a hit means ANY of them appears in
+# the retrieved name/text. Expectations were verified against the database by
+# hand — including entries the current system is known to miss, so the score
+# stays honest.
+
+dish_lookup:
+  - {query: "aloo paratha",       expect: ["paratha"]}
+  - {query: "masala dosa",        expect: ["dosa"]}
+  - {query: "butter chicken",     expect: ["butter chicken"]}
+  - {query: "dal makhani",        expect: ["dal makhani"]}
+  - {query: "poha",               expect: ["poha"]}
+  - {query: "pav bhaji",          expect: ["pav bhaji"]}
+  - {query: "dhokla",             expect: ["dhokla"]}
+  - {query: "samosa",             expect: ["samosa"]}
+  - {query: "gulab jamun",        expect: ["gulab jamun"]}
+  - {query: "chicken curry",      expect: ["chicken curry"]}
+  - {query: "naan",               expect: ["naan"]}
+  - {query: "tandoori chicken",   expect: ["tandoori chicken"]}
+  - {query: "fish curry",         expect: ["fish curry", "machli"]}
+  - {query: "matar paneer",       expect: ["matar paneer", "pea paneer"]}
+  - {query: "palak paneer",       expect: ["palak paneer", "spinach paneer"]}
+  - {query: "khichdi",            expect: ["khichdi", "khichri"]}
+  - {query: "sweet lassi",        expect: ["lassi"]}
+  - {query: "upma",               expect: ["upma"]}
+  - {query: "kheer",              expect: ["kheer"]}
+  - {query: "veg biryani",        expect: ["biryani", "biriyani"]}
+  - {query: "rajma chawal",       expect: ["rajma"]}          # known hard
+  - {query: "bhindi masala",      expect: ["bhindi", "okra"]}
+  - {query: "aloo gobi",          expect: ["gobhi", "cauliflower"]}  # known hard
+  - {query: "chole bhature",      expect: ["bhatura", "chole", "chana"]}
+
+semantic:
+  - {query: "fermented south indian breakfast made from rice and lentils",
+     expect: ["idli", "dosa", "uttapam", "appam"]}
+  - {query: "leafy green spinach curry",
+     expect: ["palak", "spinach", "saag"]}
+  - {query: "sweet milky dessert with vermicelli",
+     expect: ["kheer", "seviyan", "vermicelli"]}
+  - {query: "chickpea curry from north india",
+     expect: ["chana", "chhole", "chickpea", "chole"]}
+  - {query: "grilled marinated chicken from a clay oven",
+     expect: ["tandoori", "tikka"]}
+  - {query: "rice and lentils cooked together, comfort food",
+     expect: ["khichdi", "khichri"]}
+  - {query: "deep fried snack stuffed with spiced potato",
+     expect: ["samosa", "kachori", "bonda", "vada"]}
+  - {query: "cooling yogurt drink for summer",
+     expect: ["lassi", "chaas", "buttermilk"]}
+  - {query: "flatbread stuffed with potato filling",
+     expect: ["paratha", "parantha", "kulcha"]}
+  - {query: "crispy fried okra dish",
+     expect: ["bhindi", "okra"]}
+
+out_of_corpus:            # fallback to web MUST trigger for these
+  - {query: "litti chokha"}
+  - {query: "momos"}
+  - {query: "thukpa"}
+  - {query: "jalebi"}
+  - {query: "galouti kebab"}   # known hard: matcher is falsely confident
+  - {query: "ghevar"}
+  - {query: "dhuska"}
+  - {query: "appe"}

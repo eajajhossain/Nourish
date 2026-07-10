@@ -1,0 +1,125 @@
+[
+  {
+    "name": "Aloo Paratha",
+    "cuisine": "North Indian",
+    "ingredients": [
+      {"name": "atta", "qty": 150, "unit": "g"},
+      {"name": "potato", "qty": 200, "unit": "g"},
+      {"name": "ghee", "qty": 2, "unit": "tbsp"},
+      {"name": "salt", "qty": 1, "unit": "tsp"}
+    ]
+  },
+  {
+    "name": "Jeera Rice",
+    "cuisine": "North Indian",
+    "ingredients": [
+      {"name": "rice", "qty": 1, "unit": "cup"},
+      {"name": "ghee", "qty": 1, "unit": "tbsp"},
+      {"name": "salt", "qty": 1, "unit": "tsp"}
+    ]
+  },
+  {
+    "name": "Dal Tadka",
+    "cuisine": "North Indian",
+    "ingredients": [
+      {"name": "toor dal", "qty": 1, "unit": "cup"},
+      {"name": "onion", "qty": 1, "unit": "piece"},
+      {"name": "tomato", "qty": 1, "unit": "piece"},
+      {"name": "ghee", "qty": 1, "unit": "tbsp"},
+      {"name": "salt", "qty": 1, "unit": "tsp"}
+    ]
+  },
+  {
+    "name": "Rajma Masala",
+    "cuisine": "North Indian",
+    "ingredients": [
+      {"name": "rajma", "qty": 1, "unit": "cup"},
+      {"name": "onion", "qty": 1, "unit": "piece"},
+      {"name": "tomato", "qty": 2, "unit": "piece"},
+      {"name": "refined oil", "qty": 2, "unit": "tbsp"},
+      {"name": "salt", "qty": 1, "unit": "tsp"}
+    ]
+  },
+  {
+    "name": "Chana Masala",
+    "cuisine": "North Indian",
+    "ingredients": [
+      {"name": "chickpea", "qty": 1, "unit": "cup"},
+      {"name": "onion", "qty": 1, "unit": "piece"},
+      {"name": "tomato", "qty": 2, "unit": "piece"},
+      {"name": "refined oil", "qty": 2, "unit": "tbsp"},
+      {"name": "salt", "qty": 1, "unit": "tsp"}
+    ]
+  },
+  {
+    "name": "Poha",
+    "cuisine": "Maharashtrian",
+    "ingredients": [
+      {"name": "poha", "qty": 1, "unit": "cup"},
+      {"name": "onion", "qty": 1, "unit": "piece"},
+      {"name": "peanuts", "qty": 2, "unit": "tbsp"},
+      {"name": "refined oil", "qty": 1, "unit": "tbsp"},
+      {"name": "salt", "qty": 1, "unit": "tsp"}
+    ]
+  },
+  {
+    "name": "Besan Chilla",
+    "cuisine": "North Indian",
+    "ingredients": [
+      {"name": "besan", "qty": 1, "unit": "cup"},
+      {"name": "onion", "qty": 1, "unit": "piece"},
+      {"name": "refined oil", "qty": 1, "unit": "tbsp"},
+      {"name": "salt", "qty": 1, "unit": "tsp"}
+    ]
+  },
+  {
+    "name": "Paneer Butter Masala",
+    "cuisine": "North Indian",
+    "ingredients": [
+      {"name": "paneer", "qty": 200, "unit": "g"},
+      {"name": "tomato", "qty": 3, "unit": "piece"},
+      {"name": "butter", "qty": 2, "unit": "tbsp"},
+      {"name": "cream", "qty": 2, "unit": "tbsp"},
+      {"name": "salt", "qty": 1, "unit": "tsp"}
+    ]
+  },
+  {
+    "name": "Vegetable Khichdi",
+    "cuisine": "Pan-Indian",
+    "ingredients": [
+      {"name": "rice", "qty": 0.5, "unit": "cup"},
+      {"name": "moong dal", "qty": 0.5, "unit": "cup"},
+      {"name": "ghee", "qty": 1, "unit": "tbsp"},
+      {"name": "salt", "qty": 1, "unit": "tsp"}
+    ]
+  },
+  {
+    "name": "Rice Kheer",
+    "cuisine": "North Indian",
+    "ingredients": [
+      {"name": "rice", "qty": 0.5, "unit": "cup"},
+      {"name": "milk", "qty": 1, "unit": "l"},
+      {"name": "sugar", "qty": 5, "unit": "tbsp"}
+    ]
+  },
+  {
+    "name": "Sooji Halwa",
+    "cuisine": "North Indian",
+    "ingredients": [
+      {"name": "suji", "qty": 1, "unit": "cup"},
+      {"name": "ghee", "qty": 0.5, "unit": "cup"},
+      {"name": "sugar", "qty": 1, "unit": "cup"}
+    ]
+  },
+  {
+    "name": "Veg Pulao",
+    "cuisine": "North Indian",
+    "ingredients": [
+      {"name": "rice", "qty": 1, "unit": "cup"},
+      {"name": "peas", "qty": 0.5, "unit": "cup"},
+      {"name": "carrot", "qty": 1, "unit": "piece"},
+      {"name": "ghee", "qty": 1, "unit": "tbsp"},
+      {"name": "salt", "qty": 1, "unit": "tsp"}
+    ]
+  }
+]

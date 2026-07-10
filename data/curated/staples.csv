@@ -1,0 +1,16 @@
+name,category,kcal,protein_g,carb_g,fat_g,fibre_g,sugar_g,sodium_mg,calcium_mg,iron_mg,vitc_mg,aliases
+Ghee,Fats and Oils,900,0,0,99.8,0,0,0,0,0,0,clarified butter|desi ghee|ghee cow|ghee buffalo
+Mustard oil,Fats and Oils,884,0,0,100,0,0,0,0,0,0,sarson tel|sarson ka tel|sarson oil
+Sunflower oil,Fats and Oils,884,0,0,100,0,0,0,0,0,0,refined sunflower oil
+Groundnut oil,Fats and Oils,884,0,0,100,0,0,0,0,0,0,peanut oil|mungfali oil|moongphali oil
+Refined vegetable oil,Fats and Oils,884,0,0,100,0,0,0,0,0,0,refined oil|cooking oil|vegetable oil|veg oil
+Coconut oil,Fats and Oils,892,0,0,100,0,0,0,0,0,0,nariyal tel
+Sesame oil,Fats and Oils,884,0,0,100,0,0,0,0,0,0,til oil|gingelly oil
+Olive oil,Fats and Oils,884,0,0,100,0,0,0,0,0,0,
+Salt,Spices and Herbs,0,0,0,0,0,0,38758,24,0.33,0,table salt|namak|common salt
+Sugar white,Sweeteners,387,0,100,0,0,100,1,1,0.05,0,cheeni|chini|shakkar|white sugar
+Pigeon pea,Pulses,343,21.7,62.8,1.49,15.0,0,17,130,5.23,0,toor dal|tur dal|arhar dal|arhar|red gram
+Green gram whole,Pulses,347,23.9,62.6,1.15,16.3,0,15,132,6.74,4.8,moong|moong dal|mung bean|green gram
+Bengal gram split,Pulses,360,21.6,63.0,5.3,12.0,0,40,57,4.6,0,chana dal|split chickpea
+Besan,Flours,363,22.9,57.8,5.6,10.6,0,64,45,4.86,0,gram flour|bengal gram flour|chickpea flour
+Brown rice,Cereals,362,7.9,76.2,2.7,3.5,0,5,33,1.5,0,brown rice raw

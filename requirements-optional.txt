@@ -1,0 +1,6 @@
+# Optional: semantic ingredient matching (nourish/rag.py).
+# Heavy — pulls torch (~2GB). Only needed to enable embeddings-based
+# resolution as a fallback when exact/alias/fuzzy matching is weak.
+# Install with:  pip install -r requirements-optional.txt
+sentence-transformers>=2.2
+chromadb>=0.4

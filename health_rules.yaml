@@ -1,0 +1,24 @@
+# Nourish health-insight rules — thresholds turned into grounded statements.
+#
+# Each rule is a single condition "<nutrient> <op> <number>" evaluated against
+# the recipe's computed totals (per recipe/dish). If the condition holds, the
+# text is emitted. Numbers here are conservative, dish-level reference points
+# (loosely aligned to Indian RDA / WHO daily guidance); refine as needed.
+#
+# A rule never fires on missing data: a nutrient we don't have sums to 0, so
+# only genuine highs trigger cautions and genuine amounts trigger benefits.
+
+benefits:
+  - { if: "fibre_g >= 6",    text: "High in fibre - supports digestion and steadier blood sugar" }
+  - { if: "protein_g >= 20", text: "High in protein - helps keep you full" }
+  - { if: "protein_g >= 10", text: "Good source of protein" }
+  - { if: "iron_mg >= 3",    text: "Good source of iron" }
+  - { if: "calcium_mg >= 150", text: "Good source of calcium" }
+  - { if: "vitc_mg >= 15",   text: "Provides vitamin C" }
+  - { if: "kcal <= 150",     text: "Light on calories" }
+
+cautions:
+  - { if: "sodium_mg >= 600", text: "High in sodium - go easy on added salt and pickle" }
+  - { if: "sugar_g >= 15",    text: "High in free sugar - consider a smaller portion" }
+  - { if: "fat_g >= 25",      text: "High in fat - balance with lighter sides" }
+  - { if: "kcal >= 600",      text: "Energy-dense - mind the portion size" }

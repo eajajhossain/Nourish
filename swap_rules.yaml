@@ -1,0 +1,124 @@
+# Nourish swap rules — curated, human-readable substitution knowledge.
+#
+# Grouped by health goal. Each entry:
+#   from        ingredient to look for in the recipe (keyword match on name)
+#   to          replacement; MUST be an exact ingredient name or alias so a
+#               swap can never land on a fuzzy-wrong item. Omit to keep the
+#               same item and just use less.
+#   qty_factor  scale the quantity (e.g. 0.5 = use half); default 1.0
+#   note        shown to the user as the rationale
+#
+# A swap is only applied if it actually improves the goal metric when the
+# engine recomputes it, so neutral/harmful rules never fire.
+
+higher_fibre:
+  - from: refined wheat flour
+    to: Wheat flour, atta
+    note: "Whole-wheat atta keeps the bran, adding fibre"
+  - from: maida
+    to: Besan
+    note: "Besan (gram flour) adds fibre and protein"
+  - from: white rice
+    to: Brown rice
+    note: "Brown rice retains the fibre-rich bran"
+  - add: Roasted bengal gram
+    qty: 30
+    unit: g
+    note: "Add roasted chana for extra fibre and protein"
+
+higher_protein:
+  - from: refined wheat flour
+    to: Besan
+    note: "Besan roughly doubles the protein vs refined flour"
+  - from: maida
+    to: Besan
+    note: "Besan is far higher in protein than maida"
+  - from: paneer
+    to: Soya chunks
+    note: "Soya chunks are exceptionally high in protein"
+  - add: Roasted bengal gram
+    qty: 30
+    unit: g
+    note: "Add a small katori of roasted chana (dalia) for easy protein"
+
+iron_boost:
+  - from: rice
+    to: Bajra
+    note: "Bajra (pearl millet) carries far more iron than polished rice"
+  - from: refined wheat flour
+    to: Besan
+    note: "Besan adds plant iron and protein"
+  - from: maida
+    to: Besan
+    note: "Besan is richer in iron than maida"
+  - from: sugar
+    to: "Jaggery, cane"
+    note: "Jaggery brings iron that refined sugar has none of"
+  - from: paneer
+    to: Soya chunks
+    note: "Soya chunks are an iron powerhouse"
+  - add: Sesame seeds
+    qty: 10
+    unit: g
+    note: "Sprinkle a spoon of sesame (til) — naturally iron-rich"
+
+calcium_boost:
+  - from: rice
+    to: Ragi
+    note: "Ragi (finger millet) is one of the richest plant calcium sources"
+  - from: refined wheat flour
+    to: Ragi
+    note: "Ragi adds calcium whole wheat can't match"
+  - from: maida
+    to: Ragi
+    note: "Swap to calcium-rich ragi"
+  - from: sugar
+    to: "Jaggery, cane"
+    note: "Jaggery contributes some calcium and iron"
+  - add: Sesame seeds
+    qty: 10
+    unit: g
+    note: "Sprinkle sesame (til) — one of the richest plant calcium sources"
+
+lower_calorie:
+  - from: ghee
+    qty_factor: 0.5
+    note: "Use half the ghee to cut fat calories"
+  - from: refined vegetable oil
+    qty_factor: 0.5
+    note: "Halve the cooking oil"
+  - from: sugar
+    qty_factor: 0.5
+    note: "Reduce added sugar by half"
+
+lower_sugar:
+  - from: sugar
+    qty_factor: 0.3
+    note: "Cut most of the added sugar"
+  - from: white rice
+    to: Brown rice
+    note: "Lower-GI brown rice"
+
+diabetic_friendly:
+  - from: sugar
+    qty_factor: 0.2
+    note: "Minimise added sugar"
+  - from: refined wheat flour
+    to: Wheat flour, atta
+    note: "Whole wheat lowers the glycaemic load"
+  - from: white rice
+    to: Brown rice
+    note: "Lower-GI brown rice keeps blood sugar steadier"
+
+lower_sodium:
+  - from: salt
+    qty_factor: 0.5
+    note: "Halve the added salt"
+
+lower_fat:
+  - from: ghee
+    qty_factor: 0.5
+    note: "Use half the ghee"
+  - from: refined vegetable oil
+    qty_factor: 0.5
+    note: "Halve the cooking oil"
