@@ -1,0 +1,12 @@
+# Colang for the Nourish input rail.
+#
+# `self check input` is a BUILT-IN flow in the guardrails library: listing it
+# under rails.input.flows (config.yml) runs the self_check_input prompt
+# (prompts.yml) and, on a "yes" verdict, refuses and stops the turn. We do NOT
+# redefine that flow here (doing so would clash with the built-in) — we only
+# give the refusal a fixed message so a block costs no extra LLM generation.
+# safety.py detects the stop and renders its own crisis response, so this
+# wording is never shown to the user; it just needs to exist.
+
+define bot refuse to respond
+  "I'm sorry, but I can't help with that."

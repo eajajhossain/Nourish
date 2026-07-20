@@ -54,10 +54,11 @@ so you can explain any part of it confidently.*
 | Embeddings | **MiniLM-L6-v2 via HuggingFace Inference API** | No heavy local model download; falls back to Chroma's local ONNX if the key is absent |
 | Web fallback | **Tavily Search API** | LLM-friendly search results; used for rare dishes, trusted recipe steps, and dish history |
 | Nutrition math | **Pure Python engine** (pandas at ETL time) | Deterministic, unit-tested — the LLM never does arithmetic |
+| Content safety | **NeMo Guardrails** (self-check input) + deterministic pattern rail | Screens self-harm / dangerous-health intent before the agent; NeMo reuses the Groq model, deterministic layer is the always-on guarantee |
 | Data | IFCT 2017 (PDF), USDA FoodData Central, Indian dish nutrition CSV | Authoritative Indian + international composition data |
 | UI | **Streamlit** (chat components + custom CSS) | Fast to build, python-native; theme pinned via `.streamlit/config.toml` |
 | Storage | **SQLite everywhere** (5 stores) | Zero-ops, file-based, perfect for a local-first app |
-| Testing | **pytest + Streamlit AppTest** | 96 tests, all runnable offline — no LLM or network needed |
+| Testing | **pytest + Streamlit AppTest** | 102 tests, all runnable offline — no LLM or network needed |
 | Evaluation | **golden-set RAG harness** | measured hit-rates per cascade level, results in the repo |
 
 ## 4. Architecture
@@ -151,7 +152,7 @@ sees the current profile via the system prompt.
 | `python -m nourish.agent.build_index` | build the Chroma vector index (2,311 docs) |
 | `streamlit run app.py` | run the chat companion |
 | `streamlit run recipe_lab.py` | run the original recipe-transformer UI |
-| `python -m pytest -q` | run all 96 tests (offline) |
+| `python -m pytest -q` | run all 102 tests (offline) |
 | `python -m nourish.agent.evaluate` | measure RAG quality against the golden set |
 
 Keys live in `.env` (gitignored): `GROQ_API_KEY`, `TAVILY_API_KEY`,
@@ -183,6 +184,14 @@ food-journey table), `profile.db`, `checkpoints.db`, `chroma/`.
 7. **Answer parsing is lenient code, not LLM.** Height "5'8", "172 cm",
    "1.7 m" all parse with regex; gender/diet/activity keyword-matched with
    Hinglish support ("nahi" = no). Deterministic = testable.
+8. **Safety is a hybrid input rail that fails open to a deterministic layer.**
+   Self-harm intent must be caught *before* the LLM answers, so it's an input
+   rail, not an output check. It's two layers — a deterministic pattern check
+   (the guarantee: instant, offline, idiom-aware) and an optional NeMo
+   Guardrails LLM self-check (recall for phrasing rules can't enumerate). The
+   LLM layer fails *open* to the deterministic one, so a missing package or a
+   flaky model call can never leave the app unprotected. Same philosophy as
+   decision #3: the reliable path is code; the model only *adds* coverage.
 
 ## 9. Hard problems I actually solved (interview gold)
 
@@ -211,7 +220,7 @@ food-journey table), `profile.db`, `checkpoints.db`, `chroma/`.
    premixes; the diet chart once served them as lunch. Fix: a "not a dish"
    exclusion filter.
 
-## 10. The evaluation harness & the guardrail (built, not planned)
+## 10. The evaluation harness & the guardrails (built, not planned)
 
 **RAG evaluation** (`python -m nourish.agent.evaluate`): a hand-verified
 golden set (`eval/golden_set.yaml`) measures each cascade level — including
@@ -229,20 +238,47 @@ fact-sentences retrieve poorly for descriptive queries. The system stays
 safe because level 1 answers the common case exactly and level 3 catches
 what both miss; the improvement plan is re-ranking + table-aware chunking.
 
-**Number guardrail** (`nourish/agent/guardrail.py`): after every answer, a
-verifier extracts each data-like number from the LLM's text and checks it
-existed in this turn's tool outputs (or the user's profile), tolerating
-rounding and serving multiples while ignoring counting numbers like "step 3"
-or "2 minutes". The UI shows 🛡️ *"n numbers verified against tool data"* —
-or an explicit warning listing anything unverified. The golden rule is
-enforced by code, not by trust.
+**Number guardrail — the OUTPUT rail** (`nourish/agent/guardrail.py`): after
+every answer, a verifier extracts each data-like number from the LLM's text
+and checks it existed in this turn's tool outputs, or among the
+profile-derived figures the model was shown in its system prompt (BMI, daily
+calorie target), tolerating rounding and serving multiples while ignoring
+counting numbers like "step 3" or "2 minutes". The UI shows 🛡️ *"n numbers
+verified against tool data"* — or an explicit warning listing anything
+unverified. The golden rule is enforced by code, not by trust.
+
+**Safety rail — the INPUT rail** (`nourish/agent/safety.py`): a nutrition
+companion must never help someone harm themselves, so every user message is
+screened *before* it reaches the agent. If it expresses self-harm intent
+("I want to die", "which food helps me end my life"), the app short-circuits
+to a warm, non-clinical response with real 24×7 Indian helplines (Tele-MANAS,
+KIRAN, Vandrevala, AASRA) and never runs the agent. Two layers on purpose:
+
+1. **Deterministic patterns (always on, free, offline)** — first-person harm
+   intent, with food idioms explicitly stripped first so "this biryani is *to
+   die for*" or "I'm *dying to* try dal makhani" can never cause a false
+   block. This is the guarantee.
+2. **NeMo Guardrails self-check (optional, one Groq call)** — a `self check
+   input` rail (config in `nourish/agent/nemo_config/`) that reuses Nourish's
+   own Groq LLM to catch subtly-phrased cases the patterns miss (e.g.
+   "everyone would be better off without me" — no keyword to match). It fails
+   *open*: if `nemoguardrails` isn't installed or errors, the deterministic
+   layer still fully protects the app, so safety never depends on a heavy
+   optional dependency. Toggle with `NOURISH_SAFETY_NEMO=0`.
+
+**Why NeMo *plus* patterns, not NeMo alone?** The deterministic layer is
+instant, free, and can't be broken by a bad model call or a missing package;
+the LLM layer adds recall for phrasing rules can't enumerate. Verified
+end-to-end: the deterministic layer catches the obvious phrasings and the
+idioms pass; the NeMo layer independently caught a keyword-free ideation
+message in a live test.
 
 ## 11. Numbers to remember
 
 - **1,014** Indian dishes (nutrition per serving) · **1,012** ingredients
   (per-100g, 10 nutrients) · **2,311** vector documents
 - **11** agent tools · **9** onboarding questions (8 + conditional describe)
-- **96** automated tests, all offline · **5** SQLite stores + 1 vector store
+- **102** automated tests, all offline · **5** SQLite stores + 1 vector store
 - RAG eval: **92%** lookup hit@1 · **40%** semantic hit@4 · **88%** fallback
 - Model: **Llama 3.3 70B** on Groq · Embeddings: **MiniLM-L6-v2** (384-dim)
 

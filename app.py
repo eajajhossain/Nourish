@@ -16,7 +16,7 @@ import streamlit as st
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
 from langgraph.types import Command
 
-from nourish.agent import agent_history, config, guardrail, vectorstore
+from nourish.agent import agent_history, config, guardrail, safety, vectorstore
 from nourish.agent import profile as prof
 from nourish.agent.graph import get_app
 
@@ -154,15 +154,20 @@ def run_graph(payload) -> None:
             entry = {"role": "assistant", "text": msgs[-1].content}
             # guardrail: every data-like number in the answer must exist in
             # this turn's tool outputs (or the profile) — enforced, not hoped
+            p = prof.get()
             sources = []
+            # profile-DERIVED numbers (BMI, kcal target) are grounded too: the
+            # model sees them via profile.summary() in its system prompt, so
+            # repeating "~2300 kcal/day" is legitimate, not invented
+            if p:
+                sources.append(prof.summary(p))
             for m in reversed(msgs[:-1]):
                 if isinstance(m, HumanMessage):
                     break
                 if isinstance(m, ToolMessage):
                     sources.append(str(m.content))
             if sources:
-                v = guardrail.verify_answer(msgs[-1].content, sources,
-                                            prof.get())
+                v = guardrail.verify_answer(msgs[-1].content, sources, p)
                 if v.checked:
                     entry["verify"] = {"ok": v.ok, "checked": v.checked,
                                        "unverified": v.unverified}
@@ -322,7 +327,12 @@ if user_text := st.chat_input(placeholder):
     st.session_state.transcript.append({"role": "user", "text": user_text})
     with st.chat_message("user", avatar="🧑🏽"):
         st.markdown(user_text)
-    if st.session_state.pending_interrupt:
+    # safety input rail: catch self-harm / dangerous-health intent BEFORE the
+    # message reaches the agent, and answer with care instead of running it
+    if safety.screen(user_text).blocked:
+        st.session_state.transcript.append(
+            {"role": "assistant", "text": safety.crisis_response(prof.get())})
+    elif st.session_state.pending_interrupt:
         run_graph(Command(resume=user_text))
     else:
         run_graph({"messages": [HumanMessage(content=user_text)]})

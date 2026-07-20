@@ -1,0 +1,26 @@
+# NeMo Guardrails config for Nourish — Layer 2 of the safety input rail.
+#
+# We only use the INPUT rail here (self-check input): given a user message,
+# an LLM decides whether it expresses intent to self-harm or to use food to
+# cause harm. The actual crisis reply is rendered by nourish/agent/safety.py,
+# so this config's job is purely the yes/no safety decision.
+#
+# The `main` model below is a placeholder: at runtime safety.py builds
+# LLMRails(config, llm=<Nourish's Groq LLM>), so the self-check reuses the same
+# Groq model and API key as the rest of the app — one model, one key source.
+
+models:
+  - type: main
+    engine: groq
+    model: llama-3.3-70b-versatile
+  # Embeddings use FastEmbed (ONNX) instead of NeMo's SentenceTransformers
+  # default, which drags in `transformers` and prints a torchvision import
+  # traceback when torchvision isn't installed. FastEmbed is torch-free.
+  - type: embeddings
+    engine: FastEmbed
+    model: all-MiniLM-L6-v2
+
+rails:
+  input:
+    flows:
+      - self check input

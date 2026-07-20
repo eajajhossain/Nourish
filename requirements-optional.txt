@@ -4,3 +4,9 @@
 # Install with:  pip install -r requirements-optional.txt
 sentence-transformers>=2.2
 chromadb>=0.4
+
+# Optional: Layer 2 of the safety input rail (nourish/agent/safety.py) — a NeMo
+# Guardrails self-check that catches subtly phrased self-harm intent the
+# built-in patterns miss. The deterministic Layer 1 protects the app without
+# it, so this is optional; disable at runtime with NOURISH_SAFETY_NEMO=0.
+nemoguardrails>=0.11

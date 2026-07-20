@@ -47,6 +47,24 @@ databases own every number; the LLM only ever touches language.** And it's
 answer against the tool outputs it received, and the UI shows a
 🛡️ *"n numbers verified against tool data"* badge under each reply.
 
+## Safety guardrails
+
+Two independent guardrails run on every turn:
+
+- **Output — number verification** (`guardrail.py`): after each answer, every
+  data-like number is checked against this turn's tool outputs and the
+  profile-derived figures the model was shown (BMI, calorie target). Anything
+  unaccounted for is flagged in the UI. This enforces the golden rule above.
+- **Input — self-harm / dangerous-intent rail** (`safety.py`): *before* a
+  message reaches the agent, it's screened for self-harm or "which food helps
+  me die" intent, and short-circuited to a compassionate response with real
+  Indian crisis helplines. Two layers: a deterministic pattern check (always
+  on, free, offline — and idiom-aware, so "this biryani is *to die for*" is
+  never mistaken for a crisis) plus an optional **NeMo Guardrails** self-check
+  (`nemo_config/`) that reuses the same Groq model to catch subtly-phrased
+  cases. The NeMo layer degrades gracefully — if it isn't installed or errors,
+  the deterministic layer still fully protects the app.
+
 ## Measured retrieval quality
 
 Every level of the RAG cascade is measured against a hand-verified golden
@@ -69,6 +87,10 @@ level 3 catches what both miss.
 pip install -r requirements.txt
 python -m etl.build_all              # build the SQLite stores (one time)
 python -m nourish.agent.build_index  # build the vector index (one time)
+
+# optional: enable the NeMo Guardrails self-check layer of the safety rail
+# (the deterministic layer works without it). Toggle off with NOURISH_SAFETY_NEMO=0
+pip install -r requirements-optional.txt
 ```
 
 Put your keys in `.env` (see the placeholders in that file):
@@ -103,6 +125,9 @@ nourish/agent/          the conversational layer
   vectorstore.py        Chroma index (dishes + curated recipes + IFCT 2017)
   dietchart.py          grounded one-day plan from profile + real dishes
   agent_history.py      friendly "dishes you asked about" log
+  guardrail.py          output rail: verify every number against tool data
+  safety.py             input rail: self-harm/dangerous-intent screen (+ NeMo)
+  nemo_config/          NeMo Guardrails config (self-check input rail)
   tools.py              11 LangChain tools (DB lookup, hybrid RAG, web recipe
                         + dish-story fetchers, engine, diet chart, profile)
   graph.py              LangGraph: onboarding interrupts + agent ↔ tools loop,
@@ -110,10 +135,10 @@ nourish/agent/          the conversational layer
 etl/                    build-time: raw data → canonical SQLite stores
 app.py                  Streamlit chat UI (.streamlit/config.toml pins the theme)
 recipe_lab.py           original transformer UI (still works)
-tests/                  96 tests — engine + agent + guardrail (no network)
+tests/                  102 tests — engine + agent + guardrail + safety (no network)
 eval/                   RAG golden set + measured results
 PROJECT_GUIDE.md        full technical write-up (stack, architecture, decisions)
-INTERVIEW_PREP.md       interview Q&A for presenting this project
+
 ```
 
 ## Tests
