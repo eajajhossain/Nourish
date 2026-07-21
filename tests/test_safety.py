@@ -57,7 +57,7 @@ def test_verdict_ok_is_inverse_of_blocked():
 
 
 def test_crisis_response_uses_name_and_has_helplines():
-    txt = safety.crisis_response({"name": "Ramiz"})
+    txt = safety.crisis_response({"name": "Eajaj"})
     assert "Eajaj" in txt
     assert "14416" in txt          # Tele-MANAS
     assert "1800-599-0019" in txt  # KIRAN

@@ -48,7 +48,7 @@ def test_is_negative(text, neg):
 def test_save_get_update(tmp_path, monkeypatch):
     monkeypatch.setattr(prof, "PROFILE_DB", tmp_path / "profile.db")
     assert prof.get() is None
-    prof.save(name="Ramiz", gender="male", age=24, height_cm=172,
+    prof.save(name="Eajaj", gender="male", age=24, height_cm=172,
               weight_kg=70, activity="light", diet_pref="vegetarian",
               conditions="", condition_details="")
     p = prof.get()
@@ -58,7 +58,7 @@ def test_save_get_update(tmp_path, monkeypatch):
 
     p2 = prof.update_fields({"weight_kg": 75, "bogus": "ignored"})
     assert p2["weight_kg"] == 75
-    assert p2["name"] == "Ramiz"
+    assert p2["name"] == "Eajaj"
 
     prof.clear()
     assert prof.get() is None
